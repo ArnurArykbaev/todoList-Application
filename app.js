@@ -3,31 +3,8 @@ const tasks = [
     _id: '5d2ca9e2e03d40b326596aa7',
     completed: true,
     body:
-      'Occaecat non ea quis occaecat ad culpa amet deserunt incididunt elit fugiat pariatur. Exercitation commodo culpa in veniam proident laboris in. Excepteur cupidatat eiusmod dolor consectetur exercitation nulla aliqua veniam fugiat irure mollit. Eu dolor dolor excepteur pariatur aute do do ut pariatur consequat reprehenderit deserunt.\r\n',
-    title: 'Eu ea incididunt sunt consectetur fugiat non.',
-  },
-  {
-    _id: '5d2ca9e29c8a94095c1288e0',
-    completed: false,
-    body:
-      'Aliquip cupidatat ex adipisicing veniam do tempor. Lorem nulla adipisicing et esse cupidatat qui deserunt in fugiat duis est qui. Est adipisicing ipsum qui cupidatat exercitation. Cupidatat aliqua deserunt id deserunt excepteur nostrud culpa eu voluptate excepteur. Cillum officia proident anim aliquip. Dolore veniam qui reprehenderit voluptate non id anim.\r\n',
-    title:
-      'Deserunt laborum id consectetur pariatur veniam occaecat occaecat tempor voluptate pariatur nulla reprehenderit ipsum.',
-  },
-  {
-    _id: '5d2ca9e2e03d40b3232496aa7',
-    completed: true,
-    body:
-      'Occaecat non ea quis occaecat ad culpa amet deserunt incididunt elit fugiat pariatur. Exercitation commodo culpa in veniam proident laboris in. Excepteur cupidatat eiusmod dolor consectetur exercitation nulla aliqua veniam fugiat irure mollit. Eu dolor dolor excepteur pariatur aute do do ut pariatur consequat reprehenderit deserunt.\r\n',
-    title: 'Eu ea incididunt sunt consectetur fugiat non.',
-  },
-  {
-    _id: '5d2ca9e29c8a94095564788e0',
-    completed: false,
-    body:
-      'Aliquip cupidatat ex adipisicing veniam do tempor. Lorem nulla adipisicing et esse cupidatat qui deserunt in fugiat duis est qui. Est adipisicing ipsum qui cupidatat exercitation. Cupidatat aliqua deserunt id deserunt excepteur nostrud culpa eu voluptate excepteur. Cillum officia proident anim aliquip. Dolore veniam qui reprehenderit voluptate non id anim.\r\n',
-    title:
-      'Deserunt laborum id consectetur pariatur veniam occaecat occaecat tempor voluptate pariatur nulla reprehenderit ipsum.',
+      'Add a task description.\r\n',
+    title: 'Add a task title',
   },
 ];
 
@@ -113,8 +90,8 @@ const tasks = [
   const inputTitle = form.elements['title'];
   const inputBody = form.elements['body'];
   const themeSelect = document.getElementById('themeSelect');
-  
-  
+
+
 // Events
   setTheme(lastSelectedTheme);
   renderAllTasks(objOfTasks);
@@ -143,15 +120,15 @@ const tasks = [
     });
     listContainer.appendChild(fragment);
   }
-  
+
   //Empty Tasklist Massage
   function createEmptyTasklist() {
     const li = document.createElement('li');
     li.classList.add(
-      'list-group-item', 
-      'd-flex', 
-      'align-items-center', 
-      'flex-wrap', 
+      'list-group-item',
+      'd-flex',
+      'align-items-center',
+      'flex-wrap',
       'mt-2',
       'mx-auto',
     );
@@ -181,7 +158,7 @@ const tasks = [
       } else {
         taskElement.classList.add('completed-task');
       }
-    });      
+    });
 
   }
 
@@ -189,10 +166,10 @@ const tasks = [
   function listItemTemplate({_id, title, body} = {}) {
     const li = document.createElement('li');
     li.classList.add(
-      'list-group-item', 
-      'd-flex', 
-      'align-items-center', 
-      'flex-wrap', 
+      'list-group-item',
+      'd-flex',
+      'align-items-center',
+      'flex-wrap',
       'mt-2',
     );
     li.setAttribute('data-task-id', _id);
@@ -203,17 +180,17 @@ const tasks = [
 
     const deleteButton = document.createElement('button');
     deleteButton.classList.add(
-      'btn', 
-      'btn-danger', 
-      'ml-auto', 
+      'btn',
+      'btn-danger',
+      'ml-auto',
       'delete-btn',
     );
     deleteButton.textContent = 'Delete task';
-  
+
     const completeButton = document.createElement('button');
     completeButton.classList.add(
-      'btn', 
-      'mx-auto', 
+      'btn',
+      'mx-auto',
       'btn-success',
       'complete-btn'
     );
@@ -221,7 +198,7 @@ const tasks = [
 
     const article = document.createElement('p');
     article.classList.add(
-      'mt-2', 
+      'mt-2',
       'w-100',
     );
     article.textContent = body;
@@ -237,7 +214,7 @@ const tasks = [
     e.preventDefault();
     const titleValue = inputTitle.value;
     const bodyValue = inputBody.value;
-    
+
     if(!titleValue || !bodyValue) {
       return alert('Пожалуйста, введите title и body');
     }
@@ -282,7 +259,7 @@ const tasks = [
     if(!confirm) return;
     el.remove();
   }
-  
+
 //  Header DELETE function - confirmation check, and send to delete function
   function onDeleteHandler({ target }) {
     if(target.classList.contains('delete-btn')) {
@@ -301,7 +278,7 @@ const tasks = [
     const isConfirmComplete = confirm(`Пометить задачу ${title}, как выполненную?`);
 
     if(!isConfirmComplete) return isConfirmComplete;
-    
+
     parent.style.setProperty('background-color', '#b2b2b2', 'important');
     parent.style.setProperty('color', 'white', 'important');
 
@@ -313,9 +290,9 @@ const tasks = [
     }
 
     completedInfo['completed'] = true;
-    
-  }  
-//  Header COMPLETED function 
+
+  }
+//  Header COMPLETED function
   function onComplitedHandler({ target })  {
     if(target.classList.contains('complete-btn')) {
       const parent = target.closest('[data-task-id]');
@@ -334,8 +311,8 @@ const tasks = [
         taskElement.classList.remove('d-flex');
         taskElement.classList.add('d-none');
       }
-    });      
-    
+    });
+
   }
 
 //take id from Array and verify with DOM elements
@@ -350,7 +327,7 @@ const tasks = [
           CompareCurrentTask(id);
         }
       });
-      
+
     }
   }
 
@@ -360,7 +337,7 @@ function AllTasksHandler({ target }) {
     [...completedTasks].forEach(taskElement => {
       taskElement.classList.remove('d-none');
       taskElement.classList.add('d-flex');
-    });      
+    });
   }
 }
 
@@ -393,13 +370,13 @@ function AllTasksHandler({ target }) {
     const currentTasks = listContainer.children;
     [...currentTasks].forEach(taskElement => {
       const taskId = taskElement.dataset.taskId;
-      
+
       if(taskElement.classList.contains('complete-btn')) {
         const parent = target.closest('[data-task-id]');
         const id = parent.dataset.taskId;
         confirmCompleteTask(id, parent);
       }
-    });      
+    });
   }
 
 //THEME SELECT section
