@@ -1,7 +1,7 @@
 const tasks = [
   {
     _id: '5d2ca9e2e03d40b326596aa7',
-    completed: true,
+    completed: false,
     body:
       'Add a task description.\r\n',
     title: 'Add a task title',
@@ -34,10 +34,14 @@ const tasks = [
       '--input-focus-text-color': '#495057',
       '--input-focus-border-color': '#80bdff',
       '--input-focus-box-shadow': '0 0 0 0.2rem rgba(0, 123, 255, 0.25)',
+      '--body-background-color': '#fff',
+      '--body-background-color': '#fff',
+      '--card-background-color': '#fff',
+      '--list-group-item-color': '#fff',
     },
     dark: {
-      '--base-text-color': '#212529',
-      '--header-bg': '#343a40',
+      '--base-text-color': '#fff',
+      '--header-bg': '#495057',
       '--header-text-color': '#fff',
       '--default-btn-bg': '#58616b',
       '--default-btn-text-color': '#fff',
@@ -49,13 +53,19 @@ const tasks = [
       '--danger-btn-text-color': '#fff',
       '--danger-btn-hover-bg': '#88222c',
       '--danger-btn-border-color': '#88222c',
+      '--light-btn--bg': '#495057',
+      '--light-btn-text-color': '#fff',
+      '--light-btn-border-color': '#495057',
       '--input-border-color': '#ced4da',
-      '--input-bg-color': '#fff',
+      '--input-bg-color': '#ced4da',
       '--input-text-color': '#495057',
       '--input-focus-bg-color': '#fff',
       '--input-focus-text-color': '#495057',
       '--input-focus-border-color': '#78818a',
       '--input-focus-box-shadow': '0 0 0 0.2rem rgba(141, 143, 146, 0.25)',
+      '--body-background-color': '#343a40',
+      '--card-background-color': '#495057',
+      '--list-group-item-color': '#495057',
     },
     light: {
       '--base-text-color': '#212529',
@@ -78,6 +88,10 @@ const tasks = [
       '--input-focus-text-color': '#495057',
       '--input-focus-border-color': '#78818a',
       '--input-focus-box-shadow': '0 0 0 0.2rem rgba(141, 143, 146, 0.25)',
+      '--body-background-color': '#fff',
+      '--body-background-color': '#fff',
+      '--card-background-color': '#fff',
+      '--list-group-item-color': '#fff',
     },
   };
   let lastSelectedTheme = localStorage.getItem('app_theme') || 'default';
@@ -125,6 +139,7 @@ const tasks = [
   function createEmptyTasklist() {
     const li = document.createElement('li');
     li.classList.add(
+      'empty-tasklist',
       'list-group-item',
       'd-flex',
       'align-items-center',
@@ -134,7 +149,7 @@ const tasks = [
     );
     const span = document.createElement('span');
 
-    span.textContent = 'Ваш список задач пуст. Создайте новую задачу!';
+    span.textContent = 'Your task list is empty. Please add a new task!';
     span.style.fontWeight = 'bold';
 
     li.appendChild(span);
@@ -211,12 +226,17 @@ const tasks = [
   }
 
   function onFormSubmitHandler(e) {
+    const emptyTask = document.querySelector('.empty-tasklist' );
+
     e.preventDefault();
     const titleValue = inputTitle.value;
     const bodyValue = inputBody.value;
 
     if(!titleValue || !bodyValue) {
       return alert('Пожалуйста, введите title и body');
+    }
+    if(emptyTask) {
+      emptyTask.remove();
     }
 
     newTask = createNewTask(titleValue, bodyValue);
@@ -227,16 +247,21 @@ const tasks = [
   }
 
   function createNewTask(title, body) {
+    let createID = () =>  Math.floor(Math.random() * 100000000) + 1;
+
     const newTask = {
       completed: false,
-      _id:  `task-${Math.random}`,
+      _id:  `task-${createID()}`,
       body,
       title,
     };
 
+
     objOfTasks[newTask._id] = newTask;
     return {...newTask};
   }
+
+
 
 // DELETE section
 //  Delete function
@@ -303,7 +328,7 @@ const tasks = [
 
 //COPMLETED tasks & INCOMPLETED tasks
 //verify with DOM elements
-  function CompareCurrentTask(id) {
+  function CompareCurrentTaskHide(id) {
     const currentTasks = listContainer.children;
     [...currentTasks].forEach(taskElement => {
       const taskId = taskElement.dataset.taskId;
@@ -312,33 +337,52 @@ const tasks = [
         taskElement.classList.add('d-none');
       }
     });
+  }
 
+  function CompareCurrentTaskShow(id) {
+    const currentTasks = listContainer.children;
+    [...currentTasks].forEach(taskElement => {
+      const taskId = taskElement.dataset.taskId;
+      if(taskId === id) {
+        taskElement.classList.remove('d-none');
+        taskElement.classList.add('d-flex');
+      }
+    });
   }
 
 //take id from Array and verify with DOM elements
   function incompletedTasksHandler({ target }) {
-
-    if(target.classList.contains('incompleted-tasks-btn')){
       const objVal = Object.values(objOfTasks);
-
       objVal.forEach(task => {
+        const id = task._id;
         if(task.completed === true) {
-          const id = task._id;
-          CompareCurrentTask(id);
+          CompareCurrentTaskHide(id);
+        } else if (task.completed === false) {
+          CompareCurrentTaskShow(id)
         }
       });
 
-    }
+  }
+  function completedTasksHandler({ target }) {
+
+      const objVal = Object.values(objOfTasks);
+
+      objVal.forEach(task => {
+        const id = task._id;
+        if(task.completed === false) {
+          CompareCurrentTaskHide(id);
+        } else if (task.completed === true) {
+          CompareCurrentTaskShow(id)
+        }
+      });
   }
 
 function AllTasksHandler({ target }) {
-  if(target.classList.contains('all-tasks-btn')){
     const completedTasks = document.getElementsByClassName('d-none');
     [...completedTasks].forEach(taskElement => {
       taskElement.classList.remove('d-none');
       taskElement.classList.add('d-flex');
     });
-  }
 }
 
 //create two buttons
@@ -357,13 +401,19 @@ function AllTasksHandler({ target }) {
     filterIncompletedTasksButton.classList.add('btn', 'btn-light', 'incompleted-tasks-btn');
     filterIncompletedTasksButton.textContent = 'Incompleted tasks';
 
+    const filterCompletedTasksButton = document.createElement('button');
+    filterCompletedTasksButton.classList.add('btn', 'btn-light', 'completed-tasks-btn');
+    filterCompletedTasksButton.textContent = 'Completed tasks';
+
     parentListContainer.insertBefore(row, listContainer);
     row.appendChild(filterButtonsDiv);
     filterButtonsDiv.appendChild(filterAllTasksButton);
     filterButtonsDiv.appendChild(filterIncompletedTasksButton);
+    filterButtonsDiv.appendChild(filterCompletedTasksButton);
 
-    filterButtonsDiv.addEventListener('click', incompletedTasksHandler);
-    filterButtonsDiv.addEventListener('click', AllTasksHandler);
+    filterAllTasksButton.addEventListener('click', AllTasksHandler);
+    filterIncompletedTasksButton.addEventListener('click', incompletedTasksHandler);
+    filterCompletedTasksButton.addEventListener('click', completedTasksHandler);
   }
 
   function completeSort(objOfTasks) {
